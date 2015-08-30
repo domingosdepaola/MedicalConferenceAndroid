@@ -1,5 +1,6 @@
 package com.domingoscarreiradepaola.crossover.conference.Entity;
 
+import com.domingoscarreiradepaola.crossover.conference.Common.DateUtil;
 import com.domingoscarreiradepaola.crossover.conference.DAO.ConferenceDao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -30,7 +31,12 @@ public class Conference {
     public User PresenterUser;
     public int IdPresenterUser;
 
-    @DatabaseField(canBeNull = false,foreign = false,columnName = "IdUser")
+    @DatabaseField(canBeNull = false,foreign = true,columnName = "IdUser")
     public User CreatedUser;
     public int IdUser;
+
+    @Override
+    public String toString(){
+        return this.Title + "  -  " + DateUtil.format(this.ConferenceDate) + " - Room: " + this.Room;
+    }
 }

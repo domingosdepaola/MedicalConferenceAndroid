@@ -1,23 +1,21 @@
 package com.domingoscarreiradepaola.crossover.conference.UserInterface;
 
 import android.app.TimePickerDialog;
-import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.domingoscarreiradepaola.crossover.conference.BL.ConferenceBL;
 import com.domingoscarreiradepaola.crossover.conference.BL.LoginBL;
 import com.domingoscarreiradepaola.crossover.conference.Common.AlertUtil;
 import com.domingoscarreiradepaola.crossover.conference.Common.DateUtil;
+import com.domingoscarreiradepaola.crossover.conference.Common.SharedPreferencesUtil;
 import com.domingoscarreiradepaola.crossover.conference.Entity.Conference;
 import com.domingoscarreiradepaola.crossover.conference.Entity.User;
 import com.domingoscarreiradepaola.crossover.conference.R;
@@ -34,6 +32,7 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,6 +62,9 @@ public class ConferenceActivity extends ActionBarActivity {
     @Bean
     public LoginBL loginBL;
 
+    @Bean
+    public ConferenceBL conferenceBL;
+
     private UserAdapter userAdapter;
 
     List<User> listUser;
@@ -70,8 +72,16 @@ public class ConferenceActivity extends ActionBarActivity {
     @OptionsMenuItem(R.id.menuSave)
     MenuItem menuItem;
 
+    Integer conferenceIdSelected;
+
     @AfterViews
     public void init() {
+
+        conferenceIdSelected = getConferenceId();
+        if (conferenceIdSelected != null) {
+            setForm();
+        }
+
         try {
             listUser = this.loginBL.userDao.queryForAll();
         } catch (Exception ex) {
@@ -83,15 +93,18 @@ public class ConferenceActivity extends ActionBarActivity {
             this.spinnerUser.setAdapter(userAdapter);
         }
     }
+
     @Click(R.id.editTextConferenceDate)
     public void onClickConferenceDate() {
         setDate();
     }
-    private void setDate(){
+
+    private void setDate() {
         DialogFragment ClasseData = DatePickerFragment.newInstance(this.editTextConferenceDate);
         ClasseData.show(super.getSupportFragmentManager(), getString(R.string.datepicker));
     }
-    private void setTime(){
+
+    private void setTime() {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -105,6 +118,7 @@ public class ConferenceActivity extends ActionBarActivity {
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
     }
+
     @Click(R.id.editTextConferenceTime)
     public void onClickConferenceTime() {
         setTime();
@@ -116,34 +130,91 @@ public class ConferenceActivity extends ActionBarActivity {
             setTime();
         }
     }
+
     @FocusChange(R.id.editTextConferenceDate)
     public void onFocusConferenceDate(View hello, boolean hasFocus) {
         if (hasFocus) {
             setDate();
         }
     }
+
     @OptionsItem(R.id.menuList)
     public void goList() {
-        String x = "list";
+        ListConferenceActivity_.intent(this).start();
     }
 
     @OptionsItem(R.id.menuSave)
     public void save() {
         try {
-            Conference conference = new Conference();
-            conference.Title = editTextTitle.getText().toString();
-            conference.CreatedUser = this.loginBL.getLoggedUser();
-            conference.Description = editTextDescription.getText().toString();
-            conference.PresenterUser = new User();
-            conference.PresenterUser.Id = ((User) spinnerUser.getSelectedItem()).Id;
-            conference.IdPresenterUser = ((User) spinnerUser.getSelectedItem()).Id;
-            conference.ConferenceDate = getConferenceDateTime();
-
-        }catch (Exception ex){
+            if (blankFields()) {
+                AlertUtil.showOkAlert(this, super.getString(R.string.ok), super.getString(R.string.blank_fields));
+                return;
+            }
+            Conference conference = getForm();
+            this.conferenceBL.conferenceDao.createOrUpdate(conference);
+            Toast.makeText(this, R.string.saved_sucess, Toast.LENGTH_LONG).show();
+        } catch (Exception ex) {
             AlertUtil.showOkAlert(this, super.getString(R.string.ok), super.getString(R.string.invalid_input));
         }
     }
-    private Date getConferenceDateTime(){
+
+    private Integer getConferenceId() {
+        Integer conferenceId = null;
+        try {
+            String conferenceSelected = SharedPreferencesUtil.get(this, this.getString(R.string.conference_id_selected));
+
+            if (!conferenceSelected.equals("")) {
+                conferenceId = Integer.parseInt(conferenceSelected);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return conferenceId;
+    }
+
+    private Conference getForm() {
+        Conference conference = new Conference();
+        if (conferenceIdSelected != null) {
+            conference.Id = conferenceIdSelected;
+        }
+        conference.Title = editTextTitle.getText().toString();
+        conference.CreatedUser = this.loginBL.getLoggedUser();
+        conference.Description = editTextDescription.getText().toString();
+        conference.PresenterUser = new User();
+        conference.PresenterUser.Id = ((User) spinnerUser.getSelectedItem()).Id;
+        conference.IdPresenterUser = ((User) spinnerUser.getSelectedItem()).Id;
+        conference.ConferenceDate = getConferenceDateTime();
+        conference.Room = editTextRoom.getText().toString();
+        return conference;
+    }
+
+    private void setForm() {
+        try {
+            if(conferenceIdSelected != null) {
+                Conference conference = conferenceBL.conferenceDao.queryForId(conferenceIdSelected);
+                if (conference != null) {
+                    editTextTitle.setText(conference.Title);
+                    if (conference.Room != null)
+                        editTextRoom.setText(conference.Room);
+                    String dateString = DateUtil.format(conference.ConferenceDate);
+                    String[] dateVet = dateString.split(" ");
+                    editTextConferenceDate.setText(dateVet[0]);
+                    editTextConferenceTime.setText(dateVet[1]);
+                    if (conference.Description != null)
+                        editTextDescription.setText(conference.Description);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean blankFields() {
+
+        return (editTextConferenceDate.getText().toString().equals("") || editTextConferenceTime.getText().toString().equals("") || editTextRoom.getText().toString().equals("") || editTextTitle.getText().toString().equals(""));
+    }
+
+    private Date getConferenceDateTime() {
         Date conferenceDay = DateUtil.parseDate(String.valueOf(this.editTextConferenceDate.getText().toString()));
         String timeString = editTextConferenceTime.getText().toString();
         String[] timeVet = timeString.split(":");

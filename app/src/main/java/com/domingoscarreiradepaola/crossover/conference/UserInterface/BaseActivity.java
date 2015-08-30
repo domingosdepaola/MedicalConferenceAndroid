@@ -80,7 +80,7 @@ public class BaseActivity extends ActionBarActivity {
                 Toast.makeText(this, super.getString(R.string.disabled_user_message), Toast.LENGTH_LONG).show();
                 SharedPreferencesUtil.save(this, super.getString(R.string.disableduser), "");
                 super.finish();
-                LoginActivity_.intent(this).start();
+                //LoginActivity_.intent(this).start();
             }
         }
         catch (Exception e) {

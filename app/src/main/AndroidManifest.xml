@@ -24,6 +24,14 @@
             android:name=".UserInterface.ConferenceActivity_"
             android:label="@string/title_activity_conference" >
         </activity>
+        <activity
+            android:name=".UserInterface.ListConferenceActivity_"
+            android:label="@string/title_activity_list_confere" >
+        </activity>
+        <activity
+            android:name=".UserInterface.InviteActivity"
+            android:label="@string/title_activity_invite" >
+        </activity>
     </application>
 
 </manifest>

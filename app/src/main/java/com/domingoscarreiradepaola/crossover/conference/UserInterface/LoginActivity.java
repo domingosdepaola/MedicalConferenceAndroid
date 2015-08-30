@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.domingoscarreiradepaola.crossover.conference.BL.LoginBL;
 import com.domingoscarreiradepaola.crossover.conference.Common.AlertUtil;
+import com.domingoscarreiradepaola.crossover.conference.Common.SharedPreferencesUtil;
 import com.domingoscarreiradepaola.crossover.conference.Entity.User;
 import com.domingoscarreiradepaola.crossover.conference.Entity.UserProfile;
 import com.domingoscarreiradepaola.crossover.conference.R;
@@ -82,6 +83,7 @@ public class LoginActivity extends BaseActivity {
             sucess = false;
         }
         if (sucess) {
+            SharedPreferencesUtil.save(this, this.getString(R.string.conference_id_selected), String.valueOf(""));
             ConferenceActivity_.intent(this).start();
         } else {
             AlertUtil.showOkAlert(this, super.getString(R.string.ok), super.getString(R.string.invalid_user));

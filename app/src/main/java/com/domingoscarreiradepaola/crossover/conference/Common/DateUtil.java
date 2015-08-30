@@ -30,9 +30,8 @@ public class DateUtil {
 
     public static String format(Date date) {
 
-        return DateUtil.format(date, "dd/MM/yyyy");
+        return DateUtil.format(date, "dd/MM/yyyy HH:mm");
     }
-
     public static String format(Date date, String format) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);

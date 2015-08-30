@@ -16,6 +16,7 @@
     <string name="first_sync">firstsync</string>
     <string name="user">User</string>
     <string name="user_id">userId</string>
+    <string name="conference_id_selected">conferenceidselected</string>
     <string name="get_gcm_id">getgcmid</string>
     <string name="loading_users">Loading users...</string>
     <string name="ok">Ok</string>
@@ -39,8 +40,17 @@
     <string name="token">DomingosCarreiraDePaolaCrossOver12</string>
     <string name="key">Key</string>
     <string name="action_settings">Settings</string>
+    <string name="sugestions">See sugestions</string>
+    <string name="no_conferences_find">No conferences find</string>
     <string name="title_activity_conference">ConferenceActivity</string>
     <string name="invalid_date">Invalid Date</string>
     <string name="invalid_input">Invalid Inputs</string>
+    <string name="blank_fields">Fill all the blank fields</string>
+    <string name="saved_sucess">Saved successfully</string>
     <string name="datepicker">datepicker</string>
+    <string name="title_activity_list_confere">ListConfereActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_invite">InviteActivity</string>
 </resources>
