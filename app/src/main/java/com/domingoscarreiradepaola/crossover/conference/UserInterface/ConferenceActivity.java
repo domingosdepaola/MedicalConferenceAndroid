@@ -19,11 +19,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.domingoscarreiradepaola.crossover.conference.BL.ConferenceBL;
+import com.domingoscarreiradepaola.crossover.conference.BL.InviteBL;
 import com.domingoscarreiradepaola.crossover.conference.BL.LoginBL;
 import com.domingoscarreiradepaola.crossover.conference.Common.AlertUtil;
 import com.domingoscarreiradepaola.crossover.conference.Common.DateUtil;
 import com.domingoscarreiradepaola.crossover.conference.Common.SharedPreferencesUtil;
 import com.domingoscarreiradepaola.crossover.conference.Entity.Conference;
+import com.domingoscarreiradepaola.crossover.conference.Entity.Invite;
 import com.domingoscarreiradepaola.crossover.conference.Entity.User;
 import com.domingoscarreiradepaola.crossover.conference.R;
 import com.domingoscarreiradepaola.crossover.conference.UserInterface.Adapter.UserAdapter;
@@ -72,6 +74,9 @@ public class ConferenceActivity extends ActionBarActivity {
 
     @Bean
     public LoginBL loginBL;
+
+    @Bean
+    public InviteBL inviteBL;
 
     @Bean
     public ConferenceBL conferenceBL;
@@ -229,6 +234,34 @@ public class ConferenceActivity extends ActionBarActivity {
         calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,calDate.getTimeInMillis());
         calIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,calDateEnd.getTimeInMillis());
         startActivity(calIntent);
+        int idDoctor = loginBL.getLoggedUser().Id;
+        Invite invite = inviteBL.inviteDao.getBy(idDoctor,conference.Id);
+        if(invite != null) {
+            invite.acepted = true;
+            try {
+                inviteBL.inviteDao.update(invite);
+                Toast.makeText(this, R.string.invite_acept, Toast.LENGTH_LONG).show();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @OptionsItem(R.id.menuReject)
+    public void onReject(){
+        int idDoctor = loginBL.getLoggedUser().Id;
+        int idConference = 0;
+        if (conferenceIdSelected != null) {
+            idConference = conferenceIdSelected;
+        }
+        Invite invite = inviteBL.inviteDao.getBy(idDoctor,idConference);
+        invite.rejected = true;
+        try {
+            inviteBL.inviteDao.update(invite);
+            Toast.makeText(this, R.string.invite_reject, Toast.LENGTH_LONG).show();
+            ListConferenceActivity_.intent(this).start();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     private Integer getConferenceId() {
         Integer conferenceId = null;

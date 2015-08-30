@@ -25,7 +25,10 @@ public class Invite {
     public int IdUserCreated;
 
     @DatabaseField
-    public String Status;
+    public boolean acepted;
+
+    @DatabaseField
+    public boolean rejected;
 
     @DatabaseField
     public Date InvitationDate;

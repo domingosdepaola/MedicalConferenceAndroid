@@ -34,8 +34,10 @@ public class ConferenceBL {
                 lstConference = new ArrayList<Conference>();
             }
             try {
-                Conference conference = conferenceDao.queryForId(invite.IdConference);
-                lstConference.add(conference);
+                if(invite.rejected == false && invite.acepted == false) {
+                    Conference conference = conferenceDao.queryForId(invite.IdConference);
+                    lstConference.add(conference);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

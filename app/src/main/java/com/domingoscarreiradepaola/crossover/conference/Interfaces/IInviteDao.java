@@ -11,4 +11,5 @@ import java.util.List;
 public interface IInviteDao extends Dao<Invite,Integer> {
     List<Invite> getInviteBy(Invite invite);
     List<Invite> getByIdDoctor(int idDoctor);
+    Invite getBy(int idDoctor,int idConference);
 }

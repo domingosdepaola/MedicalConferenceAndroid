@@ -116,6 +116,8 @@ public class InviteActivity extends ActionBarActivity {
         invite.IdUserInvited = idDoctor;
         invite.IdUserCreated = loginBL.getLoggedUser().Id;
         invite.InvitationDate = new Date();
+        invite.acepted = false;
+        invite.rejected = false;
         return invite;
     }
     @OptionsItem(R.id.menu_logout)

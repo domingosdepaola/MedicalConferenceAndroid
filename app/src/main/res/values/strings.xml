@@ -5,7 +5,7 @@
     <string name="sync_service">com.domingoscarreiradepaola.crossover.conference</string>
     <string name="app_name">MedicalConferences</string>
     <string name="action_init">Default</string>
-    <string name="action_list">List</string>
+    <string name="action_list">Conferences List</string>
     <string name="nome_usuario">User Name</string>
     <string name="login">Ok</string>
     <string name="password_field">password</string>
@@ -17,6 +17,7 @@
     <string name="user">User</string>
     <string name="user_id">userId</string>
     <string name="conference_id_selected">conferenceidselected</string>
+    <string name="suggestion_id_selected">suggestionidselected</string>
     <string name="get_gcm_id">getgcmid</string>
     <string name="loading_users">Loading users...</string>
     <string name="ok">Ok</string>
@@ -52,6 +53,9 @@
     <string name="invalid_input">Invalid Inputs</string>
     <string name="blank_fields">Fill all the blank fields</string>
     <string name="saved_sucess">Saved successfully</string>
+    <string name="invite_acept">Invitation accepted</string>
+    <string name="invite_reject">Invitation rejected</string>
+    <string name="suggestion_add_toast">Enter the suggestion on the field and click Save</string>
     <string name="invitation_send">Invitation send</string>
     <string name="syncronized">Syncronized</string>
     <string name="datepicker">datepicker</string>
@@ -64,5 +68,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_invite">Invite</string>
     <string name="title_activity_calendar">CalendarActivity</string>
-    <string name="title_activity_suggestions">SuggestionsActivity</string>
+    <string name="title_activity_suggestions">Suggestions</string>
 </resources>

@@ -38,6 +38,22 @@ public class InviteDao extends BaseDaoImpl<Invite, Integer> implements IInviteDa
         }
         return list;
     }
+    public Invite getBy(int idDoctor,int idConference){
+        Invite invite = new Invite();
+        try {
+            QueryBuilder<Invite, Integer> queryBuilder = this.queryBuilder();
+
+            queryBuilder.where().eq(Invite.CONFERENCE_FIELD, idConference).and().eq(Invite.USER_INVITED_FIELD, idDoctor);
+            List<Invite> list = queryBuilder.query();
+            for(Invite item : list){
+                invite = item;
+                break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return invite;
+    }
     public List<Invite> getByIdDoctor(int idDoctor){
         List<Invite> list = null;
         try {

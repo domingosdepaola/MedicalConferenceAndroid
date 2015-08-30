@@ -79,7 +79,7 @@ public class ListConferenceActivity extends ActionBarActivity {
     }
     @OptionsItem(R.id.menu_sugestions)
     public void goSuggestions(){
-
+        SuggestionsActivity_.intent(this).start();
     }
     private void populateSpinner() {
         if (listConferences != null && listConferences.size() > 0) {
@@ -115,11 +115,6 @@ public class ListConferenceActivity extends ActionBarActivity {
         ConferenceActivity_.intent(this).start();
     }
 
-    @OptionsItem(R.id.menu_sugestions)
-    public void goSeeSugestions() {
-        String x = "";
-    }
-
     @Click(R.id.buttonAddConference)
     public void onButtonAddConferenceClick() {
         SharedPreferencesUtil.save(this, this.getString(R.string.conference_id_selected), String.valueOf(""));
@@ -147,7 +142,6 @@ public class ListConferenceActivity extends ActionBarActivity {
             e.printStackTrace();
         }
     }
-
     @OptionsItem(R.id.menu_invite)
     public void goInvite() {
         InviteActivity_.intent(this).start();
