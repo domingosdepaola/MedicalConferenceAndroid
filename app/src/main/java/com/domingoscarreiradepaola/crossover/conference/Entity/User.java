@@ -13,6 +13,7 @@ public class User {
     public static final String LOGIN_FIELD_NAME = "Login";
     public static final String PASSWORD_FIELD_NAME="Password";
     public static final String STATUS_FIELD_NAME = "Status";
+    public static final String ID_PROFILE_FIELD_NAME = "IdProfile";
     @DatabaseField(allowGeneratedIdInsert = true,generatedId = true)
     public int Id;
     @DatabaseField

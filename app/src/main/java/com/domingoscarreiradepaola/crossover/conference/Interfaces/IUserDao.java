@@ -14,4 +14,5 @@ public interface IUserDao extends Dao<User,Integer> {
     boolean saveUser(User user);
     List<User> getByUserNameAndPassword(String userName, String password) throws SQLException;
     User getUserByLogin(String login);
+    List<User> getByProfile(int idProfile);
 }

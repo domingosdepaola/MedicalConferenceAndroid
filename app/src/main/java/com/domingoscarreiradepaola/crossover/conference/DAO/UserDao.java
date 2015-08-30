@@ -72,4 +72,17 @@ public class UserDao extends BaseDaoImpl<User,Integer> implements IUserDao {
         }
         return user;
     }
+    @Override
+    public List<User> getByProfile(int idProfile){
+        User user = null;
+        List<User> list = null;
+        try {
+            QueryBuilder<User,Integer> queryBuilder = this.queryBuilder();
+            queryBuilder.where().eq(User.ID_PROFILE_FIELD_NAME,idProfile);
+            list = queryBuilder.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

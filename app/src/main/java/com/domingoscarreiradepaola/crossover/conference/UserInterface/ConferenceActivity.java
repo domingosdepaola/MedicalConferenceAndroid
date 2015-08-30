@@ -69,9 +69,6 @@ public class ConferenceActivity extends ActionBarActivity {
 
     List<User> listUser;
 
-    @OptionsMenuItem(R.id.menuSave)
-    MenuItem menuItem;
-
     Integer conferenceIdSelected;
 
     @AfterViews
@@ -81,7 +78,9 @@ public class ConferenceActivity extends ActionBarActivity {
         if (conferenceIdSelected != null) {
             setForm();
         }
-
+        fillUserSpinner();
+    }
+    private void fillUserSpinner(){
         try {
             listUser = this.loginBL.userDao.queryForAll();
         } catch (Exception ex) {
@@ -93,7 +92,6 @@ public class ConferenceActivity extends ActionBarActivity {
             this.spinnerUser.setAdapter(userAdapter);
         }
     }
-
     @Click(R.id.editTextConferenceDate)
     public void onClickConferenceDate() {
         setDate();

@@ -51,7 +51,6 @@ public class LoginBL {
         }
         return criptoPassword;
     }
-
     public boolean login(String userName, String password) throws SQLException, IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException {
 
         String criptoPassword = EncriptPassword(password);

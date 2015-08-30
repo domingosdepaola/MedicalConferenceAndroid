@@ -21,6 +21,7 @@
     <string name="loading_users">Loading users...</string>
     <string name="ok">Ok</string>
     <string name="save_now">Save now</string>
+    <string name="invite_now">Invite doctor</string>
     <string name="save_after">Save after</string>
     <string name="title_dialog_erro">Error !!</string>
     <string name="conection_offline">Conection off line</string>

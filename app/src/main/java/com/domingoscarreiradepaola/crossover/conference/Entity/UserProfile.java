@@ -11,6 +11,7 @@ import java.util.Date;
  */
 @DatabaseTable(daoClass = UserProfileDao.class)
 public class UserProfile {
+    public static final String IS_ADM_FIELD_NAME = "IsAdm";
     @DatabaseField(allowGeneratedIdInsert = true,generatedId = true)
     public int Id;
     @DatabaseField
