@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.domingoscarreiradepaola.crossover.conference.Entity.Conference;
+import com.domingoscarreiradepaola.crossover.conference.Entity.Invite;
 import com.domingoscarreiradepaola.crossover.conference.Entity.User;
 import com.domingoscarreiradepaola.crossover.conference.Entity.UserProfile;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -31,6 +32,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, User.class);
             TableUtils.createTable(connectionSource,UserProfile.class);
             TableUtils.createTable(connectionSource, Conference.class);
+            TableUtils.createTable(connectionSource, Invite.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,12 +1,19 @@
 package com.domingoscarreiradepaola.crossover.conference.UserInterface;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -35,6 +42,7 @@ import org.androidannotations.annotations.ViewById;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @EActivity(R.layout.activity_conference)
@@ -57,6 +65,9 @@ public class ConferenceActivity extends ActionBarActivity {
     public EditText editTextRoom;
 
     @ViewById
+    public EditText editTextConferenceDuration;
+
+    @ViewById
     public EditText editTextConferenceTime;
 
     @Bean
@@ -67,13 +78,14 @@ public class ConferenceActivity extends ActionBarActivity {
 
     private UserAdapter userAdapter;
 
+    private boolean adminProfile;
     List<User> listUser;
 
     Integer conferenceIdSelected;
 
     @AfterViews
     public void init() {
-
+        adjustForProfile();
         conferenceIdSelected = getConferenceId();
         if (conferenceIdSelected != null) {
             setForm();
@@ -116,6 +128,41 @@ public class ConferenceActivity extends ActionBarActivity {
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
     }
+    private void setDuration(){
+        RelativeLayout linearLayout = new RelativeLayout(this);
+        final NumberPicker aNumberPicker = new NumberPicker(this);
+        aNumberPicker.setMaxValue(8);
+        aNumberPicker.setMinValue(1);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
+        RelativeLayout.LayoutParams numPicerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        numPicerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+        linearLayout.setLayoutParams(params);
+        linearLayout.addView(aNumberPicker,numPicerParams);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Select the number");
+        alertDialogBuilder.setView(linearLayout);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+                                editTextConferenceDuration.setText(String.valueOf(aNumberPicker.getValue()));
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 
     @Click(R.id.editTextConferenceTime)
     public void onClickConferenceTime() {
@@ -128,7 +175,16 @@ public class ConferenceActivity extends ActionBarActivity {
             setTime();
         }
     }
-
+    @FocusChange(R.id.editTextConferenceDuration)
+    public void onFocusDuration(View hello, boolean hasFocus) {
+        if (hasFocus) {
+            setDuration();
+        }
+    }
+    @Click(R.id.editTextConferenceDuration)
+    public void onClickDuration(){
+        setDuration();
+    }
     @FocusChange(R.id.editTextConferenceDate)
     public void onFocusConferenceDate(View hello, boolean hasFocus) {
         if (hasFocus) {
@@ -151,11 +207,29 @@ public class ConferenceActivity extends ActionBarActivity {
             Conference conference = getForm();
             this.conferenceBL.conferenceDao.createOrUpdate(conference);
             Toast.makeText(this, R.string.saved_sucess, Toast.LENGTH_LONG).show();
+            ListConferenceActivity_.intent(this).start();
         } catch (Exception ex) {
-            AlertUtil.showOkAlert(this, super.getString(R.string.ok), super.getString(R.string.invalid_input));
+            AlertUtil.showOkAlert(this, super.getString(R.string.ok), super.getString(R.string.default_error_msg));
         }
     }
+    @OptionsItem(R.id.menuAcept)
+    public void aceptConference(){
+        Conference conference = getForm();
+        Intent calIntent = new Intent(Intent.ACTION_INSERT);
+        calIntent.setType("vnd.android.cursor.item/event");
+        calIntent.putExtra(CalendarContract.Events.TITLE, conference.Title);
+        calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, conference.Room);
+        calIntent.putExtra(CalendarContract.Events.DESCRIPTION, conference.Description);
 
+        GregorianCalendar calDate = new GregorianCalendar();
+        GregorianCalendar calDateEnd = new GregorianCalendar();
+        calDate.setTime(conference.ConferenceDate);
+        calDateEnd.setTime(conference.getEndDate());
+        calIntent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false);
+        calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,calDate.getTimeInMillis());
+        calIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,calDateEnd.getTimeInMillis());
+        startActivity(calIntent);
+    }
     private Integer getConferenceId() {
         Integer conferenceId = null;
         try {
@@ -169,21 +243,50 @@ public class ConferenceActivity extends ActionBarActivity {
         }
         return conferenceId;
     }
-
+    private void adjustForProfile() {
+        User userLogged = loginBL.getLoggedUser();
+        if (userLogged.UserProfile != null) {
+            if (userLogged.UserProfile.IsAdm) {
+                adminProfile = true;
+            } else {
+                adminProfile = false;
+                editTextDescription.setEnabled(false);
+                editTextTitle.setEnabled(false);
+                editTextConferenceDate.setEnabled(false);
+                editTextConferenceTime.setEnabled(false);
+                editTextRoom.setEnabled(false);
+                spinnerUser.setEnabled(false);
+            }
+        }
+    }
     private Conference getForm() {
         Conference conference = new Conference();
         if (conferenceIdSelected != null) {
             conference.Id = conferenceIdSelected;
         }
         conference.Title = editTextTitle.getText().toString();
-        conference.CreatedUser = this.loginBL.getLoggedUser();
+        conference.IdCreatedUser = this.loginBL.getLoggedUser().Id;
         conference.Description = editTextDescription.getText().toString();
-        conference.PresenterUser = new User();
-        conference.PresenterUser.Id = ((User) spinnerUser.getSelectedItem()).Id;
         conference.IdPresenterUser = ((User) spinnerUser.getSelectedItem()).Id;
         conference.ConferenceDate = getConferenceDateTime();
         conference.Room = editTextRoom.getText().toString();
+        conference.Duration = Integer.parseInt(editTextConferenceDuration.getText().toString());
+
         return conference;
+    }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (adminProfile) {
+            menu.findItem(R.id.menuSave).setVisible(true);
+            menu.findItem(R.id.menuAcept).setVisible(false);
+            menu.findItem(R.id.menuReject).setVisible(false);
+        } else {
+            menu.findItem(R.id.menuSave).setVisible(false);
+            menu.findItem(R.id.menuAcept).setVisible(true);
+            menu.findItem(R.id.menuReject).setVisible(true);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void setForm() {
@@ -200,6 +303,7 @@ public class ConferenceActivity extends ActionBarActivity {
                     editTextConferenceTime.setText(dateVet[1]);
                     if (conference.Description != null)
                         editTextDescription.setText(conference.Description);
+                    editTextConferenceDuration.setText(String.valueOf(conference.Duration));
                 }
             }
         } catch (Exception e) {
@@ -209,7 +313,7 @@ public class ConferenceActivity extends ActionBarActivity {
 
     private boolean blankFields() {
 
-        return (editTextConferenceDate.getText().toString().equals("") || editTextConferenceTime.getText().toString().equals("") || editTextRoom.getText().toString().equals("") || editTextTitle.getText().toString().equals(""));
+        return (editTextConferenceDuration.getText().toString().equals("") || editTextConferenceDate.getText().toString().equals("") || editTextConferenceTime.getText().toString().equals("") || editTextRoom.getText().toString().equals("") || editTextTitle.getText().toString().equals(""));
     }
 
     private Date getConferenceDateTime() {

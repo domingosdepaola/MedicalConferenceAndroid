@@ -13,5 +13,18 @@
         app:showAsAction="always|withText"
 
         ></item>
+    <item android:id="@+id/menuAcept"
+        android:orderInCategory="100"
+        android:title="@string/acept" android:icon="@drawable/ic_cab_done_mtrl_alpha"
+        app:showAsAction="always|withText"
+        android:visible="false"
+
+        ></item>
+    <item android:id="@+id/menuReject"
+        android:orderInCategory="100"
+        android:title="@string/reject" android:icon="@drawable/ic_delete_wht_24dp"
+        app:showAsAction="always|withText"
+        android:visible="false"
+        ></item>
 
 </menu>

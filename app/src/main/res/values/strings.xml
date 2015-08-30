@@ -21,6 +21,8 @@
     <string name="loading_users">Loading users...</string>
     <string name="ok">Ok</string>
     <string name="save_now">Save now</string>
+    <string name="acept">Acept</string>
+    <string name="reject">Reject</string>
     <string name="invite_now">Invite doctor</string>
     <string name="save_after">Save after</string>
     <string name="title_dialog_erro">Error !!</string>
@@ -41,17 +43,26 @@
     <string name="token">DomingosCarreiraDePaolaCrossOver12</string>
     <string name="key">Key</string>
     <string name="action_settings">Settings</string>
-    <string name="sugestions">See sugestions</string>
+    <string name="sugestions">Conference Suggestions</string>
+    <string name="logout">Logout</string>
+    <string name="invite_doctor">Invite Doctor</string>
     <string name="no_conferences_find">No conferences find</string>
-    <string name="title_activity_conference">ConferenceActivity</string>
+    <string name="title_activity_conference">Conference</string>
     <string name="invalid_date">Invalid Date</string>
     <string name="invalid_input">Invalid Inputs</string>
     <string name="blank_fields">Fill all the blank fields</string>
     <string name="saved_sucess">Saved successfully</string>
+    <string name="invitation_send">Invitation send</string>
+    <string name="syncronized">Syncronized</string>
     <string name="datepicker">datepicker</string>
-    <string name="title_activity_list_confere">ListConfereActivity</string>
+    <string name="title_activity_list_confere">List of Conferences</string>
+    <string name="inform_list_text">Welcome. Click on the list item to alter a conference. Click + button to add a new one or select an menu item.</string>
+    <string name="inform_list_doctor_text">Welcome. Click on the list item to open a conference or select an menu item.</string>
+    <string name="default_error_msg">Ops ! Something wrong. Try again.</string>
+    <string name="invite_exists">You already invited this doctor to this conference.</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_invite">InviteActivity</string>
+    <string name="title_activity_invite">Invite</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_activity_suggestions">SuggestionsActivity</string>
 </resources>

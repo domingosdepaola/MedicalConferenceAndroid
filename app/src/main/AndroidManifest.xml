@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.domingoscarreiradepaola.crossover.conference" >
 
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,10 +22,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListagemActivity_"
-            android:label="@string/title_activity_listagem" >
-        </activity>
-        <activity
             android:name=".UserInterface.ConferenceActivity_"
             android:label="@string/title_activity_conference" >
         </activity>
@@ -29,8 +30,12 @@
             android:label="@string/title_activity_list_confere" >
         </activity>
         <activity
-            android:name=".UserInterface.InviteActivity"
+            android:name=".UserInterface.InviteActivity_"
             android:label="@string/title_activity_invite" >
+        </activity>
+        <activity
+            android:name=".UserInterface.SuggestionsActivity_"
+            android:label="@string/title_activity_suggestions" >
         </activity>
     </application>
 

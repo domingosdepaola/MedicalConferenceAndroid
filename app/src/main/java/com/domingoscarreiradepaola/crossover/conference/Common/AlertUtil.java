@@ -21,7 +21,6 @@ public class AlertUtil {
         builder.setMessage(message);
         builder.create().show();
     }
-
     public static void confirme(Context context, final IConfirm confirmation, String title, String message, String okMessage, String cancelMessage) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

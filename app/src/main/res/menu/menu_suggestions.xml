@@ -1,10 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.domingoscarreiradepaola.crossover.conference.UserInterface.ListConferenceActivity">
-    <item android:id="@+id/menu_invite" android:title="@string/invite_doctor"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/menu_sugestions" android:title="@string/sugestions"
+    tools:context="com.domingoscarreiradepaola.crossover.conference.UserInterface.SuggestionsActivity">
+    <item android:id="@+id/menu_list" android:title="@string/action_list"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/menu_logout" android:title="@string/logout"
         android:orderInCategory="100" app:showAsAction="never" />

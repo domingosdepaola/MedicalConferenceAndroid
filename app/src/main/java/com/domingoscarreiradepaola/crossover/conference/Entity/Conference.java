@@ -3,8 +3,11 @@ package com.domingoscarreiradepaola.crossover.conference.Entity;
 import com.domingoscarreiradepaola.crossover.conference.Common.DateUtil;
 import com.domingoscarreiradepaola.crossover.conference.DAO.ConferenceDao;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -25,18 +28,21 @@ public class Conference {
     public Date ConferenceDate;
 
     @DatabaseField
+    public int Duration;
+
+    @DatabaseField
     public String Room;
 
-    @DatabaseField(canBeNull = true, foreign = true, columnName = "IdPresenterUser")
-    public User PresenterUser;
+    @DatabaseField
     public int IdPresenterUser;
 
-    @DatabaseField(canBeNull = false,foreign = true,columnName = "IdUser")
-    public User CreatedUser;
-    public int IdUser;
+    @DatabaseField
+    public int IdCreatedUser;
 
-    @Override
-    public String toString(){
-        return this.Title + "  -  " + DateUtil.format(this.ConferenceDate) + " - Room: " + this.Room;
+    public Date getEndDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(ConferenceDate);
+        calendar.add(Calendar.HOUR, Duration);
+        return calendar.getTime();
     }
 }
